@@ -30,6 +30,7 @@ type Config struct {
 	DumpDir           string           `json:"dump_dir"`
 	Debug             bool             `json:"debug"`
 	MetricsPrefix     string           `json:"metrics_prefix"`
+	RootCAPath        string           `json:"root_ca_path"`
 }
 
 // ReadJSON - read json file to struct
