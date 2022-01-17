@@ -27,5 +27,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("ERROR: %+v\n", err)
 	}
-	RunServer(cnf)
+	if e := RunServer(cnf); e != nil {
+		panic(e)
+	}
 }
