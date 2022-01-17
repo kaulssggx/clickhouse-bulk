@@ -4,6 +4,7 @@
   "flush_interval": 1000,
   "clean_interval": 0,
   "remove_query_id": true,
+  "root_ca_path": "",
   "dump_check_interval": 300,
   "debug": false,
   "dump_dir": "dumps",
