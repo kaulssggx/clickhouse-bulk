@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -136,10 +137,13 @@ func SafeQuit(collect *Collector, sender Sender) {
 }
 
 // RunServer - run all
-func RunServer(cnf Config) {
+func RunServer(cnf Config) (e error) {
 	InitMetrics(cnf.MetricsPrefix)
 	dumper := NewDumper(cnf.DumpDir)
-	sender := NewClickhouse(cnf.Clickhouse.DownTimeout, cnf.Clickhouse.ConnectTimeout, cnf.Clickhouse.tlsServerName, cnf.Clickhouse.tlsSkipVerify)
+	sender, e := NewClickhouse(cnf.Clickhouse.DownTimeout, cnf.Clickhouse.ConnectTimeout, cnf.Clickhouse.tlsServerName, cnf.Clickhouse.tlsSkipVerify, cnf.RootCAPath)
+	if e != nil {
+		return errors.Wrap(e, "RunServer()")
+	}
 	sender.Dumper = dumper
 	for _, url := range cnf.Clickhouse.Servers {
 		sender.AddServer(url)
@@ -177,4 +181,5 @@ func RunServer(cnf Config) {
 		SafeQuit(collect, sender)
 		os.Exit(1)
 	}
+	return nil
 }
